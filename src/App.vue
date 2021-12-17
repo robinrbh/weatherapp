@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
+    <div class="container" :class="backgroundImage">
       <h1>Find your weather</h1>
       <input 
         placeholder="Typ een stad..."
@@ -37,6 +37,9 @@ export default {
       error: false
     }
   },
+  created() {
+    this.getWeather()
+  },
   methods: {
     getWeather() {
       BackendService.fetchWeather(this.query)
@@ -49,24 +52,52 @@ export default {
             }, 1000);
         })
     }
+  },
+  computed: {
+    backgroundImage() {
+      let className = "warm"
+
+      if(this.weather && this.weather.main.temp < 16) {
+        className = 'cold'
+      }
+
+      return className
+    }
   }
 }
 </script>
 
 <style>
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.warm {
+  background: url("https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260");
+  background-size: cover;
+}
+
+.cold {
+  background: url("https://images.pexels.com/photos/300857/pexels-photo-300857.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+  background-size: cover;
 }
 
 .container {
-  width: 600px;
+  width: 900px;
+  min-height: 650px;
   justify-content: center;
   margin: 0 auto;
+  background-position: bottom;
+  transition: 0.4s;
 }
 
 .weather-data {
@@ -89,9 +120,10 @@ p.temp {
 }
 
 input {
-  width: 100%;
+  width: 60%;
   padding: 15px;
   border-radius: 15px;
+  margin: 0 auto;
 }
 
 svg {

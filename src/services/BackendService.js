@@ -22,7 +22,8 @@ export default {
   fetchForecast(query) {
     return apiClient.get("/forecast", {
       params: {
-        q: query
+        q: query,
+        cnt: 3
       }
     })
   }

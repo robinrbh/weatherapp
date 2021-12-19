@@ -7,12 +7,16 @@
     </div>
     <div class="weather-right">
       <h1>Vind het weer in jouw stad</h1>
-      <input 
-        placeholder="Typ een stad..."
-        v-model="query"
-        type="text" 
-        @keyup.enter="getWeather(); getForecast()"
-      />
+      <div class="inputContainer">
+        <input 
+          placeholder="Typ een stad..."
+          v-model="query"
+          type="text" 
+          @input="getSuggestions"
+          @keyup.enter="userWantsSuggestionOrWeather"
+        />
+        <span class="suggestion">{{suggestion}}</span>
+      </div>
       <p>Voelt aan als: {{ weather.main.feels_like | round }} graden</p>
       <p>Minimum: {{ weather.main.temp_min | round }} graden</p>
       <p>Maximum: {{ weather.main.temp_max | round }} graden</p>
@@ -36,7 +40,8 @@ export default {
       query: "Groningen",
       weather: "",
       forecast: "",
-      error: false
+      error: false,
+      suggestion: "",
     }
   },
   mounted() {
@@ -44,6 +49,39 @@ export default {
     this.getForecast()
   },
   methods: {
+    userWantsSuggestionOrWeather(){
+      if(this.suggestion !== this.query){
+        this.query = this.suggestion;
+      } else {
+        this.getWeather();
+        this.getForecast()
+      }
+    },
+    getSuggestions() {
+      const firstSuggestion = this.suggestionsFromInput(this.query)[0]
+      const suggestionLeftOver = this.suggestionMinusInput(firstSuggestion, this.query) || ''
+
+      this.suggestion = this.query + suggestionLeftOver
+
+      console.log("suggestion?", this.suggestion)
+    },
+    suggestionsFromInput(query) {
+      const suggestions = ['Amsterdam', 'Maastricht', 'Maaskantje', 'Den Bosch']
+
+      return suggestions.map(x => {
+        if(x.includes(query)){
+          return x
+        } else {
+          return null
+          }
+      }).filter(x => x !== null)
+    },
+    suggestionMinusInput(suggestion, input) {
+      const leftOvertoShow = suggestion?.substring(input.length, suggestion.length)
+      if(input) {
+        return leftOvertoShow
+      }
+    },
     getWeather() {
       BackendService.fetchWeather(this.query)
         .then((response) => {

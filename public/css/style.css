@@ -3,77 +3,6 @@ html, body {
   margin: 0;
 }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  background: #3A4D97;
-  color: white;
-  display: flex;
-  align-items: center;
-}
-
-.warm {
-  background: url("https://images.pexels.com/photos/912364/pexels-photo-912364.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260");
-  background-size: cover;
-}
-
-.cold {
-  background: url("https://images.pexels.com/photos/300857/pexels-photo-300857.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-  background-size: cover;
-}
-
-.container {
-  width: 900px;
-  min-height: 100vh;
-  margin: 0 auto;
-  align-items: center;
-  padding: 0 30px;
-}
-
-.weather-data {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-top: 50px;
-}
-
-.weather-left {
-  width: 45%;
-  min-height: 400px;
-  background-position: bottom;
-  transition: 0.4s;
-  border-radius: 25px;
-  text-align: left;
-  position: relative;
-  -webkit-box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
-	box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
-	-webkit-transform: scale(1.1) perspective(1500px) rotateY(20deg);
-	transform: scale(1.1) perspective(1500px) rotateY(20deg);
-  z-index: 9;
-}
-
-.weather-left:hover {
-  cursor: pointer;
-  -webkit-transform: scale(1.1) perspective(1500px) rotateY(10deg);
-	transform: scale(1.1) perspective(1500px) rotateY(10deg);
-}
-
-.weather-right {
-  width: 55%;
-  height: 300px;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(5px);
-  border-radius: 0 15px 15px 0;
-  text-align: left;
-  padding: 25px;
-}
-
-svg {
-  filter: drop-shadow( 1px 1px 1px rgba(0, 0, 0, .5));
-}
-
 h1, h2, h3, h4, p {
   padding: 0;
   margin: 0;
@@ -119,6 +48,83 @@ input:focus {
   position: relative;
 }
 
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  background: #3A4D97;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  width: 900px;
+  height: 100vh;
+  margin: 0 auto;
+  align-items: center;
+  padding: 0 30px;
+}
+
+.weather-data {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 50px;
+}
+
+.weather-left {
+  width: 45%;
+  min-height: 400px;
+  background-position: bottom;
+  transition: 0.4s;
+  border-radius: 25px;
+  text-align: left;
+  position: relative;
+  -webkit-box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.2);
+	-webkit-transform: scale(1.1) perspective(1500px) rotateY(20deg);
+	transform: scale(1.1) perspective(1500px) rotateY(20deg);
+  z-index: 9;
+}
+
+.weather-left:hover {
+  cursor: pointer;
+  -webkit-transform: scale(1.1) perspective(1500px) rotateY(10deg);
+	transform: scale(1.1) perspective(1500px) rotateY(10deg);
+}
+
+.cold {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.5)), url("https://images.pexels.com/photos/300857/pexels-photo-300857.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+  background-size: cover;
+}
+
+.normal {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1595494730761-32a4fc26e447?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80");
+  background-size: cover;
+}
+
+.warm {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1501426026826-31c667bdf23d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2836&q=80");
+  background-size: cover;
+}
+
+.weather-right {
+  width: 55%;
+  height: 300px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  border-radius: 0 15px 15px 0;
+  text-align: left;
+  padding: 25px 30px;
+  margin-left: -5px;
+}
+
+svg {
+  filter: drop-shadow( 1px 1px 1px rgba(0, 0, 0, .5));
+}
+
 .suggestion {
   color: rgba(0, 0, 0, 0.363);
   font-family: Arial, Helvetica, sans-serif;
@@ -129,6 +135,10 @@ input:focus {
   left: 22px
 }
 
+.errorClass {
+  border: 2px solid red;
+  transition: 0.5s;
+}
 
 path {
   fill: white;

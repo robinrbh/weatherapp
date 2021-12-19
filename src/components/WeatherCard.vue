@@ -17,13 +17,18 @@
         />
         <span class="suggestion">{{suggestion}}</span>
       </div>
-      <p>Voelt aan als: {{ weather.main.feels_like | round }} graden</p>
-      <p>Minimum: {{ weather.main.temp_min | round }} graden</p>
-      <p>Maximum: {{ weather.main.temp_max | round }} graden</p>
+      <div v-if="error">
+        <p>Van deze stad kon helaas het weer niet gevonden worden. </p>
+      </div>
+      <div v-if="!error">
+        <p>Voelt aan als: {{ weather.main.feels_like | round }} graden</p>
+        <p>Minimum: {{ weather.main.temp_min | round }} graden</p>
+        <p>Maximum: {{ weather.main.temp_max | round }} graden</p>
 
-      <h3>Weervoorspelling</h3>
-      <div class="forecast" v-for="(day, i) in forecast" :key="i">
-        <p>{{ day.dt | convertDate }}: {{ day.main.temp | round }} graden</p>
+        <h3>Weervoorspelling</h3>
+        <div class="forecast" v-for="(day, i) in forecast" :key="i">
+          <p>{{ day.dt | convertDate }}: {{ day.main.temp | round }} graden</p>
+        </div>
       </div>
     </div>
   </div>
@@ -58,18 +63,19 @@ export default {
       }
     },
     getSuggestions() {
-      const firstSuggestion = this.suggestionsFromInput(this.query)[0]
-      const suggestionLeftOver = this.suggestionMinusInput(firstSuggestion, this.query) || ''
+      const city = this.query.toLowerCase()
 
-      this.suggestion = this.query + suggestionLeftOver
+      const firstSuggestion = this.suggestionsFromInput(city)[0]
+      const suggestionLeftOver = this.suggestionMinusInput(firstSuggestion, city) || ''
 
-      console.log("suggestion?", this.suggestion)
+      this.suggestion = city + suggestionLeftOver
     },
     suggestionsFromInput(query) {
       const suggestions = ['Amsterdam', 'Maastricht', 'Maaskantje', 'Den Bosch']
 
       return suggestions.map(x => {
-        if(x.includes(query)){
+        const value = x.toLowerCase()
+        if(value.includes(query)){
           return x
         } else {
           return null
@@ -88,9 +94,9 @@ export default {
           this.weather = response.data
         }, () => {
           this.error = true
-            setTimeout(() => {
-              this.error = false;
-            }, 1000);
+          setTimeout(() => {
+            this.error = false;
+          }, 5000);
         })
     },
     getForecast() {
@@ -99,18 +105,20 @@ export default {
           this.forecast = response.data.list
         }, () => {
           this.error = true
-            setTimeout(() => {
-              this.error = false;
-            }, 1000);
+          setTimeout(() => {
+            this.error = false;
+          }, 5000);
         })
     }
   },
   computed: {
     backgroundImage() {
-      let className = "warm"
+      let className = "normal"
 
-      if(this.weather && this.weather.main.temp < 16) {
+      if(this.weather && this.weather.main.temp < 0) {
         className = 'cold'
+      } else if (this.weather && this.weather.main.temp > 20) {
+        className = 'warm'
       }
 
       return className

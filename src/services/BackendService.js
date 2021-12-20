@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const apiKey = process.env.API_KEY
+const apiKey = process.env.VUE_APP_API_KEY
 const apiUrl = `https://api.openweathermap.org/data/2.5/`
 
 const apiClient = axios.create({

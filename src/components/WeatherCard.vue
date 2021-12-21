@@ -1,7 +1,7 @@
 <template>
   <div class="weather-data" v-if="weather">
     <div class="weather-left" :class="backgroundImage">
-      <h2 class="city">{{ weather.name }}, {{ weather.sys.country }}</h2>
+      <h2 class="city">{{ weather.name }}</h2>
       <p class="temp">{{ weather.main.temp | round }}&deg;C</p>
       <inline-svg class="icon" :src="require(`../assets/img/icons/${weather.weather[0].icon}.svg`)"></inline-svg> 
     </div>
@@ -15,7 +15,7 @@
           @input="getSuggestions"
           @keyup.enter="userWantsSuggestionOrWeather"
         />
-        <span class="suggestion">{{suggestion}}</span>
+        <span class="suggestion">{{ suggestion }}</span>
       </div>
       <div v-if="error">
         <p>Van deze stad kon helaas het weer niet gevonden worden. </p>
@@ -37,6 +37,7 @@
 <script>
 import BackendService from '@/services/BackendService'
 import moment from 'moment';
+import cities from '@/cities.json'
 
 export default {
   name: "WeatherCard",
@@ -47,6 +48,7 @@ export default {
       forecast: "",
       error: false,
       suggestion: "",
+      firstSuggestion: ""
     }
   },
   mounted() {
@@ -55,25 +57,25 @@ export default {
   },
   methods: {
     userWantsSuggestionOrWeather(){
-      if(this.suggestion !== this.query){
-        this.query = this.suggestion;
+      if(this.firstSuggestion !== this.query){
+        this.query = this.firstSuggestion;
+        this.suggestion = ""
       } else {
-        this.getWeather();
+        this.getWeather()
         this.getForecast()
+        this.suggestion = ""
       }
     },
     getSuggestions() {
       const city = this.query.toLowerCase()
 
-      const firstSuggestion = this.suggestionsFromInput(city)[0]
-      const suggestionLeftOver = this.suggestionMinusInput(firstSuggestion, city) || ''
+      this.firstSuggestion = this.suggestionsFromInput(city)[0]
+      const suggestionLeftOver = this.suggestionMinusInput(this.firstSuggestion, city) || ''
 
       this.suggestion = city + suggestionLeftOver
     },
     suggestionsFromInput(query) {
-      const suggestions = ['Amsterdam', 'Maastricht', 'Maaskantje', 'Den Bosch']
-
-      return suggestions.map(x => {
+      return cities.map(x => {
         const value = x.toLowerCase()
         if(value.includes(query)){
           return x
@@ -83,7 +85,7 @@ export default {
       }).filter(x => x !== null)
     },
     suggestionMinusInput(suggestion, input) {
-      const leftOvertoShow = suggestion?.substring(input.length, suggestion.length)
+      const leftOvertoShow = suggestion.substring(input.length, suggestion.length)
       if(input) {
         return leftOvertoShow
       }
